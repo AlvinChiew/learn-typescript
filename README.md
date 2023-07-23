@@ -2,7 +2,13 @@
 
 ## Quick Start
 
-1.
+1. `ts-node index.ts`
+    - compile & run
+    - which consists of:
+        1. `tsc index.ts`
+            - compile tsc to js
+        1. `node index.js`
+            - run js
 
 ## Installation
 
