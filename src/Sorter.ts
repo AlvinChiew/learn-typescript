@@ -1,16 +1,11 @@
-import { CollectionNumbers} from './CollectionNumbers';
+export abstract class Sorter {
+  abstract isLargerThanNext(index:number): boolean;
+  abstract swap(index:number): void
+  abstract length: number;
 
-interface Sortable {
-  length: number;
-  isLargerThanNext(index: number): boolean;
-  swap(index: number): void;
-}
-
-export class Sorter {
-  constructor(public collection: Sortable) {}
 
   sort(): void {
-    const {  length } = this.collection
+    const {  length } = this
     // same as const length = this.collection.length
 
     // use Type Guard to restore uncommon methods/properties:
@@ -19,8 +14,8 @@ export class Sorter {
 
     for (let i = 0; i < length; i++) {
       for (let j = 0; j < length - 1; j++) {
-        if ( this.collection.isLargerThanNext(j) ) { 
-          this.collection.swap(j);
+        if ( this.isLargerThanNext(j) ) { 
+          this.swap(j);
         }
       }
     }

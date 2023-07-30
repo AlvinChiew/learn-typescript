@@ -1,5 +1,10 @@
-export class CollectionCharacters {
-  constructor(public collection: string) {}
+import { Sorter } from "./Sorter";
+
+
+export class CollectionCharacters extends Sorter{
+  constructor(public collection: string) {
+    super()
+  }
 
 
   get length(): number {
