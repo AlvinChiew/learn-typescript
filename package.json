@@ -1,0 +1,19 @@
+{
+  "name": "learn-typescript",
+  "version": "1.0.0",
+  "description": "- `tsc src/index.ts`\r - `tsc --init` or `tsc -w` after configuring `rootdir` and `outdir` in `tsconfig`\r   - `-w` flag for hotfixes",
+  "main": "index.js",
+  "dependencies": {
+    "concurrently": "^8.2.0",
+    "nodemon": "^3.0.1",
+    "typescript": "^5.1.6"
+  },
+  "scripts": {
+    "start:build": "tsc -w",
+    "start:run": "nodemon build/index.js",
+    "start": "concurrently npm:start:*"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
