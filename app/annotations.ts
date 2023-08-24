@@ -175,3 +175,44 @@ const Coke = {
 
 // report_summary(Civic);
 // report_summary(Coke);
+
+
+// Generics
+class ArrayOfItems<T> {
+  constructor(public collection: T[]) {};
+
+  get(index: number): T {
+    return this.collection[index];
+  }
+}
+
+const str = new ArrayOfItems(['a','b','c','d','e','f']);
+const num = new ArrayOfItems([1,2,3,4,5]);
+
+
+function printItems<T>(arr: T[]): void {
+  for (let i = 0; i < arr.length; i++){
+    console.log(arr[i]);
+  }
+}
+
+printItems(['a','b','c','d','e','f']);
+printItems([1,2,3,4,5]);
+printItems([[1],2,[3],4,5]);
+
+
+
+interface Summarizable {
+  summary(): string;
+}
+
+function summarizeItem<T extends Summarizable>(arr: T[]): string {
+  for (let i = 0; i < arr.length; i++) {
+    return arr[i].summary();
+  }
+  return "";
+}
+
+// summarizeItem([1,2,3,4]);
+summarizeItem([Civic, Coke]);
+
