@@ -1,4 +1,4 @@
-import axios, { AxiosPromise } from "axios";
+import axios, { AxiosResponse } from "axios";
 
 
 interface UserProps {
@@ -41,6 +41,19 @@ export class User {
   }
 
   fetch(): void {
-    axios.get(`https://api.twitter.com`)
+    axios.get(`http://localhost:3000/users/${this.data.id}`)
+      .then((response: AxiosResponse): void => {
+        this.set(response.data);
+      });
+  }
+
+  save(): void {
+    const id = this.data.id;
+
+    if (id) {
+      axios.put(`http://localhost:3000/users/${id}`, this.data);
+    } else {
+      axios.post(`http://localhost:3000/users/`, this.data);
+    }
   }
 }

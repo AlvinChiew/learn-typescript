@@ -15,3 +15,15 @@ user.trigger('change');
 
 // axios.post('http://localhost:3000/users', {name: 'James',age: 21})
 axios.get('http://localhost:3000/users/1')
+const user2 = new User({id: 1});
+user2.fetch();
+setTimeout(() => {
+  console.log(user2.get('name'));
+}, 1000)
+
+
+user2.set({name: 'Jackson', age: 21});
+user2.save();
+
+const user3 = new User({name: 'Rose', age: 19});
+// user3.save();
