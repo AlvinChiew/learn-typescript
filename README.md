@@ -1,3 +1,12 @@
-# Learn TypeScript
+# Getting started
 
-## Quick Start
+## Run
+
+    - `parcel index.html`
+    - `json-server -w db.json`
+
+## Setup
+  
+    - `npm install -g parcel-bundler`
+    - `npm install -g json-server`
+    - `npm instal axios`
