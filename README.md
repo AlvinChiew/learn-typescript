@@ -10,3 +10,4 @@
     - `npm install -g parcel-bundler`
     - `npm install -g json-server`
     - `npm instal axios`
+    - `tsc --init` -> "strict": true
