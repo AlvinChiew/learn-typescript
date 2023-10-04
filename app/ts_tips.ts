@@ -1,26 +1,26 @@
 const truth: boolean = false;
 
-// array
+// ***** array *****
 const truths: boolean[] = [true, false];
 const cars: string[][] = [['toyota'], ['honda']];
 const dates: (Date | string)[] =  [new Date()];
 dates.push('2023-01-01');
 // console.log(dates);
 
-// tuple
+// ***** tuple *****
 // useful to handle csv
 type Drink = [string, boolean, number]
 const drink1: [string, boolean, number] = ['brown', true, 1 ];
 const drink2: Drink = ['brown', true, 1 ];
 
-// object
+// ***** object *****
 const now: Date = new Date();
 const carSpecs = {
   horsepower: 400,
   weight: 1200
 }
 
-// class
+// ***** class *****
 class Vehicle {
   constructor(public color: string) {}
 
@@ -54,9 +54,9 @@ const train = new Vehicle('White');
 const civic = new Car(4, 'White');
 // console.log(train.honk());
 // console.log(train.drive());
-console.log(civic.honk());
+// console.log(civic.honk());
 // console.log(civic.drive());
-console.log(civic.start_engine());
+// console.log(civic.start_engine());
 
 class Color {
   r: number;
@@ -78,13 +78,13 @@ class Color {
 const color: Color = new Color(0,0);
 // console.log(color.print_color());
 
-// literal
+// ***** literal *****
 const coords: {x: number; y: number} = {
   x: 0,
   y: 20
 }
 
-// function
+// ***** function *****
 // - arrow function
 const log: (i: number) => void = (i: number) => {
   // console.log(i);
@@ -100,7 +100,7 @@ function add(x: number, y: number): number {
 const substract = function(x: number, y: number): number { return x - y; };
 const throwError = (message: string): never => { throw new Error(message); };
 
-// destructuring prams
+// ***** destructuring prams *****
 const forecast_today = {
   date: new Date(),
   weather: 'sunny'
@@ -126,7 +126,7 @@ const {coords: {x, y}}:{coords: {x:number; y:number}} = profile;
 
 
 
-// WHEN to use annotation
+// ***** WHEN to use annotation *****
 // - Function that returns `any` type
 const json = '{"x":0,"y":1}'
 const coords_json: {x: number; y: number} = JSON.parse(json)
@@ -147,7 +147,7 @@ for (let i = 0; i < numbers.length; i++) {
   // console.log(numberAboveZero);
 }
 
-// Interface
+// ***** Interface *****
 interface Reportable {
   summary(): string;
 }
@@ -177,7 +177,7 @@ const Coke = {
 // report_summary(Coke);
 
 
-// Generics
+// ***** Generics *****
 class ArrayOfItems<T> {
   constructor(public collection: T[]) {};
 
@@ -196,9 +196,9 @@ function printItems<T>(arr: T[]): void {
   }
 }
 
-printItems(['a','b','c','d','e','f']);
-printItems([1,2,3,4,5]);
-printItems([[1],2,[3],4,5]);
+// printItems(['a','b','c','d','e','f']);
+// printItems([1,2,3,4,5]);
+// printItems([[1],2,[3],4,5]);
 
 
 
@@ -216,3 +216,69 @@ function summarizeItem<T extends Summarizable>(arr: T[]): string {
 // summarizeItem([1,2,3,4]);
 summarizeItem([Civic, Coke]);
 
+
+
+// ***** Decorators *****
+// make sure `experimentalDecorators` and `emitDecoratorMetadata` are set to true in tsconfig
+// is only run when class definition is run, not when instance is created
+
+function methodDecorator(errMsg: string) {
+  return function (target: any, key: string, desc: PropertyDescriptor): void {
+    // called when class is defined
+    // console.log(`Target: ${target}`);
+    // console.log(`Key: ${key}`);
+    // console.log(`Descriptor: ${desc}`);
+
+    // called when instance runs the method
+    const method = desc.value;
+    desc.value = function () {
+      try {
+        method();
+      } catch (e) {
+        console.log(errMsg);
+      }
+    }
+  }
+}
+
+function innerDecorator(target: any, key: string) {
+  console.log(`Target: ${target}`);
+  console.log(`Key: ${key}`);
+}
+
+function paramDecorator(target: any, key: string, index: number): void {
+  console.log(`Target: ${target}`);
+  console.log(`Key: ${key}`);
+  console.log(`Index: ${index}`);
+}
+
+function classDecorator(constructor: typeof Boat) {
+  console.log(`Constructor: ${constructor}`);
+}
+
+@classDecorator
+class Boat {
+  
+  @innerDecorator // properties
+  color: string = 'red'; 
+
+  @innerDecorator // accessor
+  get formattedColor(): string {
+    return `this boat has a color of ${this.color}`;
+  }
+
+  @innerDecorator // method
+  @methodDecorator('ERROR - Opps, boat is sunk!')
+  sail(@paramDecorator speed: string,  @paramDecorator direction: string): void{
+    console.log(speed);
+    if (speed === 'fast') {
+      console.log(`swish ~ ${direction}`);
+    } else {
+      console.log(`woosh ~ ${direction}`);
+    }
+    // throw new Error();
+  }
+}
+
+const titanic = new Boat();
+titanic.sail('fast', 'north');

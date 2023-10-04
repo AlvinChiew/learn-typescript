@@ -1,4 +1,4 @@
-// js object methods
+// ***** js object methods *****
 const obj = {
   obj_name: 'Danny',
   age: 99,
@@ -16,13 +16,15 @@ console.log(
   Object.keys(obj),
   Object.values(obj),
   Object.entries(obj),
+  Object.defineProperty(obj, 'age', {writable: false}),
+  Object.getOwnPropertyDescriptor(obj, 'age'),
   {...obj, age: 51, obj_name: 'Tom'},
   `${obj_name} is a ${gender} and ${age} years old.`,
   
 )
 
 
-// js array methods
+// ***** js array methods *****
 const arr = [1, 2, 3, 4]
 
 console.log(
