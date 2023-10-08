@@ -219,15 +219,14 @@ summarizeItem([Civic, Coke]);
 
 
 // ***** Decorators *****
-// make sure `experimentalDecorators` and `emitDecoratorMetadata` are set to true in tsconfig
+// in tsconfig, make sure `experimentalDecorators` and `emitDecoratorMetadata` are set to true, target = "es5"
 // is only run when class definition is run, not when instance is created
 
 function methodDecorator(errMsg: string) {
   return function (target: any, key: string, desc: PropertyDescriptor): void {
     // called when class is defined
-    // console.log(`Target: ${target}`);
-    // console.log(`Key: ${key}`);
-    // console.log(`Descriptor: ${desc}`);
+    console.log(target)
+    console.log(`Key: ${key}; Descriptor: ${desc}`);
 
     // called when instance runs the method
     const method = desc.value;
@@ -242,33 +241,32 @@ function methodDecorator(errMsg: string) {
 }
 
 function innerDecorator(target: any, key: string) {
-  console.log(`Target: ${target}`);
+  console.log(target)
   console.log(`Key: ${key}`);
 }
 
 function paramDecorator(target: any, key: string, index: number): void {
-  console.log(`Target: ${target}`);
-  console.log(`Key: ${key}`);
-  console.log(`Index: ${index}`);
+  // console.log(target)
+  // console.log(`Key: ${key}; Index: ${index}`);  
 }
 
 function classDecorator(constructor: typeof Boat) {
   console.log(`Constructor: ${constructor}`);
 }
 
-@classDecorator
+// @classDecorator
 class Boat {
   
-  @innerDecorator // properties
+  // @innerDecorator // properties
   color: string = 'red'; 
 
-  @innerDecorator // accessor
+  // @innerDecorator // accessor
   get formattedColor(): string {
     return `this boat has a color of ${this.color}`;
   }
 
-  @innerDecorator // method
-  @methodDecorator('ERROR - Opps, boat is sunk!')
+  // @innerDecorator // method
+  // @methodDecorator('ERROR - Opps, boat is sunk!')
   sail(@paramDecorator speed: string,  @paramDecorator direction: string): void{
     console.log(speed);
     if (speed === 'fast') {
@@ -281,4 +279,89 @@ class Boat {
 }
 
 const titanic = new Boat();
-titanic.sail('fast', 'north');
+// titanic.sail('slow', 'north');
+
+
+
+// ***** Metadata *****
+// in tsconfig, make sure `experimentalDecorators` and `emitDecoratorMetadata` are set to true, target = "es5"
+// npm init -y; npm install reflect-metadata
+
+
+// *** Example 1 ***
+
+import 'reflect-metadata'
+
+const plane = {
+  color: 'red'
+};
+
+Reflect.defineMetadata('size', 'large', plane);
+Reflect.defineMetadata('saturation', 'high', plane, 'color');
+// console.log(plane);
+// console.log(Reflect.getMetadata('size', plane));
+// console.log(Reflect.getMetadata('saturation', plane, 'color'));
+
+
+
+function storeSecret(secret: string) {
+  return function(target: Jeep, key: string) {
+    Reflect.defineMetadata('secret', secret, target, key);
+  }
+}
+
+function setDirection(direction: string) {
+  return function(target: Jeep, key: string) {
+    Reflect.defineMetadata('direction', direction, target, key);
+  }
+}
+
+function getMetdata(target: typeof Jeep) {
+  for (let key in target.prototype) {
+    // console.log(Reflect.getMetadata('secret', target.prototype, key))    
+    // console.log(Reflect.getMetadata('direction', target.prototype, key))
+  }
+}
+
+@getMetdata
+class Jeep {
+  
+  color: string = 'green'  
+  
+  @setDirection('north')
+  @storeSecret('* move secret')
+  move(): void {
+    console.log('vrooom ~')
+  }
+
+  @storeSecret('* rev secret')
+  rev(): void {
+    console.log('vrooom ~')
+  }
+}
+
+
+
+// *** Example 2 ***
+import "reflect-metadata";
+const formatMetadataKey = '';
+
+function format(formatString: string) {
+  return Reflect.metadata(formatMetadataKey, formatString);
+}
+function getFormat(target: any, propertyKey: string) {
+  return Reflect.getMetadata(formatMetadataKey, target, propertyKey);
+}
+
+class Greeter {
+  @format("Hello, %s")
+  greeting: string;
+  constructor(message: string) {
+    this.greeting = message;
+  }
+  greet() {
+    let formatString = getFormat(this, "greeting");
+    return formatString.replace("%s", this.greeting);
+  }
+}
+// console.log(new Greeter('ABC').greet());
