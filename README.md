@@ -3,6 +3,7 @@
 ## Quick Start
 
 1. `npm install`
+1. in tsconfig, set `experimentalDecorators` and `emitDecoratorMetadata` to `true` and `target` to `ES5` to enable decorator
 1. `npm start`
 
 ## Setup
