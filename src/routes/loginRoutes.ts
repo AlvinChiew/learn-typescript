@@ -18,23 +18,23 @@ function requireAuth(req: RequestWithBody, res: Response, next: NextFunction): v
   res.send(`Permission denied`);
 }
 
-router.get('/login', (req: Request, res: Response) => {
-  res.send(`
-    <form method="POST">
-      <div>
-        <label>Email</label>
-        <input name="email"/>
-      </div>
-      <div>
-        <label>Password</label>
-        <input name="password" type="password"/>
-      </div>
-      <button>Login</button>
-    </form>
-  `);
-})
+// router.get('/login', (req: Request, res: Response) => {
+//   res.send(`
+//     <form method="POST">
+//       <div>
+//         <label>Email</label>
+//         <input name="email"/>
+//       </div>
+//       <div>
+//         <label>Password</label>
+//         <input name="password" type="password"/>
+//       </div>
+//       <button>Login</button>
+//     </form>
+//   `);
+// })
 
-router.post('/login', (req: RequestWithBody, res: Response) => {
+router.post('/auth/login', (req: RequestWithBody, res: Response) => {
   const {email, password} = req.body;
     if (email && password && email === 'a' && password === '1') {
       // res.send(email + password)
@@ -44,7 +44,7 @@ router.post('/login', (req: RequestWithBody, res: Response) => {
       req.session = undefined;
       res.send(`
         <div>Failed to login. Click below to login again</div>
-        <a href="/login">Login</a>
+        <a href="/auth/login">Login</a>
       `);
     }
 })
@@ -59,7 +59,7 @@ router.get('/', (req: RequestWithBody, res:Response) => {
   } else {
     res.send(`
       <div>Click here to login</div>
-      <a href="/login">Login</a><br/>
+      <a href="/auth/login">Login</a><br/>
       <a href="/protected">Protected Page</a> <br/>
     `)
   }

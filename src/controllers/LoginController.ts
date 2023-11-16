@@ -1,10 +1,16 @@
-import { Request, Response } from "express";
-import { get, controller } from "./decorators"
+import { NextFunction, Request, Response } from "express";
+import { get, controller, use } from "./decorators"
 
+
+function logger(req: Request, res: Response, next: NextFunction): void {
+  console.log('I - Middleware is triggered!');
+  next();
+}
 
 @controller('/auth')
 class LoginController {
   @get('/login')
+  @use(logger)
   getLogin(req: Request, res: Response): void {
     res.send(`
       <form method="POST">
