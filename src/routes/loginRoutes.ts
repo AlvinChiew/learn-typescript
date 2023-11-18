@@ -34,20 +34,20 @@ function requireAuth(req: RequestWithBody, res: Response, next: NextFunction): v
 //   `);
 // })
 
-router.post('/auth/login', (req: RequestWithBody, res: Response) => {
-  const {email, password} = req.body;
-    if (email && password && email === 'a' && password === '1') {
-      // res.send(email + password)
-      req.session = { loggedIn: true };
-      res.redirect('/');
-    } else {
-      req.session = undefined;
-      res.send(`
-        <div>Failed to login. Click below to login again</div>
-        <a href="/auth/login">Login</a>
-      `);
-    }
-})
+// router.post('/login', (req: RequestWithBody, res: Response) => {
+//   const {email, password} = req.body;
+//     if (email && password && email === 'a' && password === '1') {
+//       // res.send(email + password)
+//       req.session = { loggedIn: true };
+//       res.redirect('/');
+//     } else {
+//       req.session = undefined;
+//       res.send(`
+//         <div>Failed to login. Click below to login again</div>
+//         <a href="/auth/login">Login</a>
+//       `);
+//     }
+// })
 
 router.get('/', (req: RequestWithBody, res:Response) => {
   if (req.session && req.session.loggedIn) {
