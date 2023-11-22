@@ -1,27 +1,21 @@
-import React from "react";
 import ReactDOM from "react-dom";
+import { configureStore } from "@reduxjs/toolkit";
+import { Provider } from 'react-redux'
+import thunk from 'redux-thunk'
+import { App } from "./components/App";
 
 
-class App extends React.Component {
-  state = {counter: 0};
+// const store = createStore(reducers, applyMiddleware(thunk));
+const store = configureStore({
+  reducer: {
+    counter: () => 1
+  },
+  middleware: [thunk]
+})
 
-  onIncrease = (): void => {
-    this.setState({ counter: this.state.counter + 1});
-  };
-
-  onDecrease = (): void => {
-    this.setState({ counter: this.state.counter - 1});
-  };
-
-  render() {
-    return (
-      <div>
-        <button onClick={this.onIncrease}>Increase</button><br/>
-        <button onClick={this.onDecrease}>Decrease</button><br/>
-        { this.state.counter} 
-      </div>    
-    );
-  }
-}
-
-ReactDOM.render(<App/>, document.querySelector("#root"));
+ReactDOM.render(
+  <Provider store={store}>
+    <App/>
+  </Provider>
+  , document.querySelector("#root")  
+);
